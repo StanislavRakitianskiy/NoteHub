@@ -1,11 +1,12 @@
-import css from "./NoteList.module.css";
 import type { Note } from "../../types/note";
+import css from "./NoteList.module.css";
 
 interface NoteProps {
   note: Note[];
 }
 
-const NoteList = ({note}: NoteProps) => {
+const NoteList = ({ note }: NoteProps) => {
+
   return (
     <ul className={css.list}>
       {note.map((notes) => (
@@ -20,6 +21,6 @@ const NoteList = ({note}: NoteProps) => {
       ))}
     </ul>
   );
-}
+};
 
-export default NoteList
+export default NoteList;

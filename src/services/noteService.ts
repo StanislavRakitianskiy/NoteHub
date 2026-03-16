@@ -8,22 +8,23 @@ interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
 }
-interface FetchNotesParams {
-    page?: number;
-    search?: string;
-}
 
-export const fetchNotes = async ({page = 1, search = ''}: FetchNotesParams): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (
+  page?: number,
+  perPage?: number,
+  search?: string,
+): Promise<FetchNotesResponse> => {
   const res = await axios.get<FetchNotesResponse>(baseUrl, {
     params: {
-        page,
-        search,
-    }, 
+      page,
+      perPage,
+      search,
+    },
     headers: {
-        Authorization: `Bearer ${tmdbToken}`,
-    }
-  })
-  return res.data
+      Authorization: `Bearer ${tmdbToken}`,
+    },
+  });
+  return res.data;
 };
 export const createNote = () => {};
 export const deleteNote = () => {};
