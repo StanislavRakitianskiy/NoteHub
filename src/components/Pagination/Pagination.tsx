@@ -8,12 +8,13 @@ interface PaginationProps {
 }
 
 const Pagination = ({currentPage, totalPage, onPageChange}: PaginationProps ) => {
+    const ElemReactPaginate = (ReactPaginate as unknown as { default?: typeof ReactPaginate }).default ?? ReactPaginate;
   return (
-    <ReactPaginate
+    <ElemReactPaginate
       pageCount={totalPage}
       pageRangeDisplayed={5}
       marginPagesDisplayed={1}
-      onPageChange={({ selected }) => onPageChange(selected + 1)}
+      onPageChange={(event: { selected: number }) => onPageChange(event.selected + 1)}
       forcePage={currentPage - 1}
       containerClassName={css.pagination}
       activeClassName={css.active}
