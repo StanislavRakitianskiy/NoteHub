@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Note } from "../types/note";
+import type { Note, NoteTag } from "../types/note";
 
 const baseUrl = "https://notehub-public.goit.study/api/notes";
 const tmdbToken = import.meta.env.VITE_NOTEHUB_TOKEN as string;
@@ -7,6 +7,12 @@ const tmdbToken = import.meta.env.VITE_NOTEHUB_TOKEN as string;
 interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
+}
+
+interface CreateNoteResponse {
+  title: string;
+  content: string;
+  tag: NoteTag;
 }
 
 export const fetchNotes = async (
@@ -26,5 +32,12 @@ export const fetchNotes = async (
   });
   return res.data;
 };
-export const createNote = () => {};
+export const createNote = async (rest: CreateNoteResponse): Promise<Note> => {
+  const res = await axios.post<Note>(baseUrl, rest, {
+    headers: {
+      Authorization: `Bearer ${tmdbToken}`,
+    },
+  });
+  return res.data;
+};
 export const deleteNote = () => {};
