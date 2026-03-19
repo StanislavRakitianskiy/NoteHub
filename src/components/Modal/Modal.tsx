@@ -1,12 +1,13 @@
 import { createPortal } from "react-dom";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import css from "./Modal.module.css";
 
 interface ModalProps {
+  children: ReactNode;
   onClose: () => void;
 }
 
-function Modal({ onClose }: ModalProps) {
+function Modal({ onClose, children }: ModalProps) {
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -30,15 +31,7 @@ function Modal({ onClose }: ModalProps) {
       aria-modal="true"
       onClick={handleBackdropClick}
     >
-      <div className={css.modal}>
-        <button
-          className={css.closeButton}
-          onClick={onClose}
-          aria-label="Close modal"
-        >
-          &times;
-        </button>
-      </div>
+      <div className={css.modal}>{children}</div>
     </div>,
     document.body,
   );

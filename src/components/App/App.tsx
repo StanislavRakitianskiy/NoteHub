@@ -1,4 +1,5 @@
 import Pagination from "../Pagination/Pagination";
+import NoteForm from "../NoteForm/NoteForm";
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
@@ -42,7 +43,9 @@ function App() {
       {data && data.notes.length > 0 && <NoteList note={data.notes} />}
       {/* Компонент SearchBox */}
       {/* Кнопка створення нотатки */}
-      {isModalOpen && <Modal onClose={closeModal} />}
+      {isModalOpen && (<Modal onClose={closeModal}>
+        <NoteForm onClose={closeModal} />
+        </Modal>)}
     </div>
   );
 }
