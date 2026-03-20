@@ -15,6 +15,10 @@ interface CreateNoteResponse {
   tag: NoteTag;
 }
 
+interface DeleteNoteResponse {
+  id: string;
+}
+
 export const fetchNotes = async (
   page?: number,
   perPage?: number,
@@ -40,4 +44,11 @@ export const createNote = async (rest: CreateNoteResponse): Promise<Note> => {
   });
   return res.data;
 };
-export const deleteNote = () => {};
+export const deleteNote = async (id: DeleteNoteResponse): Promise<Note> => {
+  const res = await axios.delete<Note>(baseUrl + `/${id.id}`, {
+        headers: {
+      Authorization: `Bearer ${tmdbToken}`,
+    },
+  })
+  return res.data
+};
