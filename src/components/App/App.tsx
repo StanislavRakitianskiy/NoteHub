@@ -1,24 +1,26 @@
+import { useState } from "react";
+import { useDebouncedCallback } from 'use-debounce';
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import Pagination from "../Pagination/Pagination";
 import NoteForm from "../NoteForm/NoteForm";
-import { useState } from "react";
 import Modal from "../Modal/Modal";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { fetchNotes } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
+import SearchBox from "../SearchBox/SearchBox";
 import css from "./App.module.css";
 
 function App() {
+  const [searchValue, setSearchValue] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState(12);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false)
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["article", page, perPage],
-    queryFn: () => fetchNotes(page, perPage),
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["article", page, topic],
+    queryFn: () => fetchNotes({page, perPage:12, search: topic}),
     placeholderData: keepPreviousData,
   });
 
@@ -27,9 +29,22 @@ function App() {
     setPage(newChange);
   };
 
+  const updateSearchQuery = useDebouncedCallback((value: string) => {
+    setTopic(value);
+    setPage(1);
+  }, 300);
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    updateSearchQuery(value);
+  };
+
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
+
+        <SearchBox value={searchValue} onChange={handleSearchChange} />
+
         {totalPage > 1 && (
           <Pagination
             currentPage={page}
@@ -40,9 +55,8 @@ function App() {
         <button className={css.button} onClick={openModal}>Create note +</button>
       </header>
       {isLoading && <p>Loading ...</p>}
+      {isError && <p>Error server</p>}
       {data && data.notes.length > 0 && <NoteList note={data.notes} />}
-      {/* Компонент SearchBox */}
-      {/* Кнопка створення нотатки */}
       {isModalOpen && (<Modal onClose={closeModal}>
         <NoteForm onClose={closeModal} />
         </Modal>)}

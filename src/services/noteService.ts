@@ -9,27 +9,21 @@ interface FetchNotesResponse {
   totalPages: number;
 }
 
+interface FetchNotesParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+}
+
 interface CreateNoteResponse {
   title: string;
   content: string;
   tag: NoteTag;
 }
 
-interface DeleteNoteResponse {
-  id: string;
-}
-
-export const fetchNotes = async (
-  page?: number,
-  perPage?: number,
-  search?: string,
-): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (params: FetchNotesParams): Promise<FetchNotesResponse> => {
   const res = await axios.get<FetchNotesResponse>(baseUrl, {
-    params: {
-      page,
-      perPage,
-      search,
-    },
+    params,
     headers: {
       Authorization: `Bearer ${tmdbToken}`,
     },
@@ -44,11 +38,11 @@ export const createNote = async (rest: CreateNoteResponse): Promise<Note> => {
   });
   return res.data;
 };
-export const deleteNote = async (id: DeleteNoteResponse): Promise<Note> => {
-  const res = await axios.delete<Note>(baseUrl + `/${id.id}`, {
-        headers: {
+export const deleteNote = async (id: string): Promise<Note> => {
+  const res = await axios.delete<Note>(baseUrl + `/${id}`, {
+    headers: {
       Authorization: `Bearer ${tmdbToken}`,
     },
-  })
-  return res.data
+  });
+  return res.data;
 };

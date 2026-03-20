@@ -6,7 +6,7 @@ import type { NoteTag } from "../../types/note";
 import { createNote } from "../../services/noteService";
 import css from "./NoteForm.module.css";
 
-interface CloseModal {
+interface NoteFormProps {
   onClose: () => void;
 }
 
@@ -21,7 +21,7 @@ const initialValues: OrderFormValue = {
   tag: "Todo",
 };
 
-const NoteForm = ({ onClose }: CloseModal) => {
+const NoteForm = ({ onClose }: NoteFormProps) => {
   const queryClient = useQueryClient();
   const Schema = Yup.object().shape({
     title: Yup.string()
