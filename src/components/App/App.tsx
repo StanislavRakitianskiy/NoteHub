@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from "use-debounce";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import Pagination from "../Pagination/Pagination";
 import NoteForm from "../NoteForm/NoteForm";
@@ -13,14 +13,14 @@ function App() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false)
+  const closeModal = () => setIsModalOpen(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["article", page, topic],
-    queryFn: () => fetchNotes({page, perPage:12, search: topic}),
+    queryFn: () => fetchNotes({ page, perPage: 12, search: topic }),
     placeholderData: keepPreviousData,
   });
 
@@ -42,7 +42,6 @@ function App() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-
         <SearchBox value={searchValue} onChange={handleSearchChange} />
 
         {totalPage > 1 && (
@@ -52,14 +51,18 @@ function App() {
             onPageChange={handleOnPageChange}
           />
         )}
-        <button className={css.button} onClick={openModal}>Create note +</button>
+        <button className={css.button} onClick={openModal}>
+          Create note +
+        </button>
       </header>
       {isLoading && <p>Loading ...</p>}
       {isError && <p>Error server</p>}
       {data && data.notes.length > 0 && <NoteList note={data.notes} />}
-      {isModalOpen && (<Modal onClose={closeModal}>
-        <NoteForm onClose={closeModal} />
-        </Modal>)}
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <NoteForm onClose={closeModal} />
+        </Modal>
+      )}
     </div>
   );
 }

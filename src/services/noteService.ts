@@ -21,7 +21,9 @@ interface CreateNoteResponse {
   tag: NoteTag;
 }
 
-export const fetchNotes = async (params: FetchNotesParams): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (
+  params: FetchNotesParams,
+): Promise<FetchNotesResponse> => {
   const res = await axios.get<FetchNotesResponse>(baseUrl, {
     params,
     headers: {

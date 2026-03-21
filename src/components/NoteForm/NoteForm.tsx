@@ -1,5 +1,5 @@
 import { Formik, Form, Field, type FormikHelpers, ErrorMessage } from "formik";
-import { useMutation, useQueryClient  } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Yup from "yup";
 import { useId } from "react";
 import type { NoteTag } from "../../types/note";
@@ -35,11 +35,11 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
   });
   const fieldId = useId();
   const mutation = useMutation({
-    mutationFn: (createNote),
+    mutationFn: createNote,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['article']})
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["article"] });
+    },
+  });
   const handleSubmit = (
     values: OrderFormValue,
     action: FormikHelpers<OrderFormValue>,
@@ -47,8 +47,8 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
     mutation.mutate({
       title: values.title,
       content: values.content,
-      tag: values.tag
-    })
+      tag: values.tag,
+    });
     action.resetForm();
     onClose();
   };
@@ -110,11 +110,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            className={css.submitButton}
-            disabled={false}
-          >
+          <button type="submit" className={css.submitButton} disabled={false}>
             Create note
           </button>
         </div>
